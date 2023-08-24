@@ -1,4 +1,4 @@
-const FetchPet = async ({ queryKey }) => {
+const fetchPet = async ({ queryKey }) => {
   const id = queryKey[1];
   const apiRes = await fetch(`http://pets-v2.dev-apis.com/pets?id=${id}`);
 
@@ -8,4 +8,4 @@ const FetchPet = async ({ queryKey }) => {
 
   return apiRes.json();
 };
-export default FetchPet;
+export default fetchPet;
