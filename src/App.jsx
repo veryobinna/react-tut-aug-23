@@ -1,12 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import AdoptedPetContext from "./AdoptedPetContext";
-import Details from "./Details";
-import SearchParams from "./SearchParams";
 
+const Details = lazy(()=> import("./Details"));
+const SearchParams = lazy(() => import("./SearchParams"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -22,6 +22,14 @@ const App = () => {
     <AdoptedPetContext.Provider value={adoptedPet}>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
+
+          <Suspense
+          fallback={
+            <div className="loading-pane">
+              <h2 className="loader">🌀</h2>
+            </div>
+          }
+          >
           <header>
             <Link to="/">Adopt me</Link>,
           </header>
@@ -29,6 +37,8 @@ const App = () => {
             <Route path="/" element={<SearchParams />} />
             <Route path="/details/:id" element={<Details />} />
           </Routes>
+
+          </Suspense>
         </QueryClientProvider>
       </BrowserRouter>
     </AdoptedPetContext.Provider>
